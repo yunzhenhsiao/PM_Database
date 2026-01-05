@@ -35,11 +35,22 @@ if search_name:
             # 3. 查詢該學員的課程紀錄
             st.write("---")
             st.subheader("📚 上課歷史紀錄")
-            course_query = "SELECT course_type, class_name, rfa_cert_no,rfa_training,rfa_license_no FROM course_records WHERE student_id = ?"
+            course_query = "SELECT course_type, class_name, rfa_cert_no, rfa_training, rfa_license_no FROM course_records WHERE student_id = ?"
             courses = pd.read_sql(course_query, conn, params=(student['student_id'],))
             
             if not courses.empty:
-                st.dataframe(courses, use_container_width=True)
+                # 定義中文標題對照表
+                course_mapping = {
+                    'course_type': '課程類別',
+                    'class_name': '上課班別',
+                    'rfa_cert_no': '結訓證號',
+                    'rfa_training': '持證訓練',
+                    'rfa_license_no': 'RFA證號'
+                }
+                # 1. 重新命名欄位 2. 將 None 轉為 "-" 讓介面更美觀
+                display_courses = courses.rename(columns=course_mapping).fillna("-")
+                # hide_index=True 隱藏最左邊的 0, 1, 2
+                st.dataframe(display_courses, use_container_width=True, hide_index=True)
             else:
                 st.info("尚無上課紀錄")
 
@@ -49,7 +60,16 @@ if search_name:
             softwares = pd.read_sql(soft_query, conn, params=(student['student_id'],))
             
             if not softwares.empty:
-                st.dataframe(softwares, use_container_width=True)
+                # 定義中文標題對照表
+                soft_mapping = {
+                    'software_name': '軟體名稱',
+                    'purchase_date': '購買日期',
+                    'plan_type': '方案類型',
+                    'serial_number': '使用序號'
+                }
+                # 1. 重新命名欄位 2. 將 None 轉為 "-"
+                display_softwares = softwares.rename(columns=soft_mapping).fillna("-")
+                st.dataframe(display_softwares, use_container_width=True, hide_index=True)
             else:
                 st.info("尚無軟體購買紀錄")
             
