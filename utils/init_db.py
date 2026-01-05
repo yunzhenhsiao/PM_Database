@@ -87,8 +87,8 @@ def create_database():
 
 if __name__ == '__main__':
     # 如果資料庫已存在，這行可以先刪除舊的重新來過 (測試階段可以用，正式上線要小心)
-    # if os.path.exists(DB_NAME):
-    #     os.remove(DB_NAME)
-    #     print("已刪除舊資料庫")
+    if os.path.exists(DB_NAME):
+        os.remove(DB_NAME)
+        print("已刪除舊資料庫")
 
     create_database()

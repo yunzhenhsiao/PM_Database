@@ -35,7 +35,7 @@ if search_name:
             # 3. 查詢該學員的課程紀錄
             st.write("---")
             st.subheader("📚 上課歷史紀錄")
-            course_query = "SELECT course_type, class_name, class_date, rfa_cert_no FROM course_records WHERE student_id = ?"
+            course_query = "SELECT course_type, class_name, rfa_cert_no,rfa_training,rfa_license_no FROM course_records WHERE student_id = ?"
             courses = pd.read_sql(course_query, conn, params=(student['student_id'],))
             
             if not courses.empty:

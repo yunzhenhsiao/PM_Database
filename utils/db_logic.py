@@ -35,7 +35,7 @@ def upsert_student(conn, student_data):
         # (你可以根據需求決定是否要覆蓋舊資料，這裡假設以新上傳的為準)
         sql_update = """
         UPDATE students 
-        SET name=?, company=?, department=?, job_title=?, line_id=?, address=?, tel=?
+        SET name=?, company=?, department=?, job_title=?, line_id=?, email=?, address=?, tel=?
         WHERE student_id=?
         """
         cursor.execute(sql_update, (
@@ -44,6 +44,7 @@ def upsert_student(conn, student_data):
             student_data.get('department'),
             student_data.get('job_title'),
             student_data.get('line_id'),
+            student_data.get('email'),
             student_data.get('address'),
             student_data.get('tel'),
             student_id
@@ -53,8 +54,8 @@ def upsert_student(conn, student_data):
     else:
         # --- 情境 B: 新學員 (Not Found) -> 執行 INSERT ---
         sql_insert = """
-        INSERT INTO students (name, phone, company, department, job_title, line_id, address, tel)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO students (name, phone, company, department, job_title, line_id, email, address, tel)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
         cursor.execute(sql_insert, (
             student_data.get('name'),
@@ -63,6 +64,7 @@ def upsert_student(conn, student_data):
             student_data.get('department'),
             student_data.get('job_title'),
             student_data.get('line_id'),
+            student_data.get('email'),
             student_data.get('address'),
             student_data.get('tel')
         ))
@@ -89,14 +91,13 @@ def add_course_record(conn, student_id, course_data):
         return
 
     sql = """
-    INSERT INTO course_records (student_id, course_type, class_name, class_date, rfa_cert_no, rfa_training, rfa_license_no)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO course_records (student_id, course_type, class_name, rfa_cert_no, rfa_training, rfa_license_no)
+    VALUES (?, ?, ?, ?, ?, ?)
     """
     cursor.execute(sql, (
         student_id,
         course_data.get('course_type', '一般'), # 預設為一般
         course_data.get('class_name'),
-        course_data.get('class_date'),
         course_data.get('rfa_cert_no'),
         course_data.get('rfa_training'),
         course_data.get('rfa_license_no')
@@ -115,10 +116,17 @@ def add_software_record(conn, student_id, software_data):
     # 同樣檢查是否重複 (同一個人 + 同一個軟體 + 同一個購買日/序號)
     check_sql = "SELECT purchase_id FROM software_purchases WHERE student_id=? AND serial_number=?"
     # 如果沒有序號，可以用軟體名稱+日期來檢查，這邊先示範用序號檢查
-    if software_data.get('serial_number'):
+    if software_data.get('serial_number') and software_data.get('software_name') == '退休理財顧問系統':
         cursor.execute(check_sql, (student_id, software_data.get('serial_number')))
         if cursor.fetchone():
             print(f"  -> 略過：序號 {software_data.get('serial_number')} 已存在")
+            return
+    else:
+        # 如果不是退休理財顧問系統，或沒有序號，可以用軟體名稱+購買日期來檢查
+        check_sql = "SELECT purchase_id FROM software_purchases WHERE student_id=? AND software_name=?"
+        cursor.execute(check_sql, (student_id, software_data.get('software_name')))
+        if cursor.fetchone():
+            print(f"  -> 略過：軟體 {software_data.get('software_name')} 已存在")
             return
 
     sql = """

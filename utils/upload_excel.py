@@ -38,19 +38,27 @@ def process_uploaded_excel(df, data_type):
                     'record_id': None,  # 新增不需要 ID
                     'class_name': row.get('班別'),
                     'course_type': 'RFA' if 'RFA' in str(row.get('班別')) else '一般',
-                    'rfa_cert_no': row.get('結訓證號'),
-                    'rfa_training': row.get('持證訓練'),
-                    'rfa_license_no': row.get('RFA 證號'),
+                    'rfa_cert_no': row.get('結訓證號') if 'RFA' in str(row.get('班別')) else None,
+                    'rfa_training': row.get('持證訓練') if 'RFA' in str(row.get('班別')) else None,
+                    'rfa_license_no': row.get('RFA 證號') if 'RFA' in str(row.get('班別')) else None,
                 }
                 add_course_record(conn, current_student_id, course_data)
                 
             elif data_type == 'software':
+                raw_date = row.get('購買日期')
+                if pd.notnull(raw_date):
+                    if hasattr(raw_date, 'strftime'): # 檢查是否有時間格式
+                        purchase_date_str = raw_date.strftime('%Y-%m-%d')
+                    else:
+                        purchase_date_str = str(raw_date)
+                else:
+                    purchase_date_str = None
                 software_data = {
                     'purchase_id': None,  # 新增不需要 ID
-                    'purchase_date': row.get('購買日期'),
                     'software_name': row.get('軟體名稱'),
-                    'plan_type': row.get('購買方案'),
-                    'serial_number': row.get('序號'),
+                    'purchase_date': purchase_date_str if '退休理財顧問系統' in str(row.get('軟體名稱')) else None,
+                    'plan_type': row.get('購買方案') if '退休理財顧問系統' in str(row.get('軟體名稱')) else None,
+                    'serial_number': row.get('序號') if '退休理財顧問系統' in str(row.get('軟體名稱')) else None,
                 }
                 add_software_record(conn, current_student_id, software_data)
         
