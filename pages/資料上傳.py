@@ -10,6 +10,8 @@ uploaded_file = st.file_uploader("上傳 Excel", type=['xlsx'])
 if uploaded_file and st.button("確認匯入"):
     df = pd.read_excel(uploaded_file)
     
+    df = df.where(pd.notnull(df), None)
+    
     # 直接呼叫你之前寫好的那個函數
     with st.spinner('正在匯入中...'):
         process_uploaded_excel(df, data_type=upload_type)

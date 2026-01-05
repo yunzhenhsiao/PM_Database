@@ -14,11 +14,19 @@ def process_uploaded_excel(df, data_type):
         # 用迴圈讀取每一列 (Row)
         for index, row in df.iterrows():
             
+            phone = str(row.get('手機') or row.get('電話號碼') or '').strip().replace('-', '')
+            name = row.get('姓名') or row.get('學員姓名') or row.get('Name')  # 彈性處理
+            
+            # 2. 基本防呆：如果連名字或手機都沒有，就跳過這一個人
+            if not phone or not name or phone == 'None':
+                print(f"第 {index+1} 筆資料缺失關鍵欄位，已略過。")
+                continue
+
             # --- 步驟 1: 準備學員資料 (Mapping) ---
             # 這裡就是你發揮的地方：把 Excel 的各種怪欄位名，對應到我們的標準欄位
             student_data = {
-                'name': row.get('姓名') or row.get('學員姓名'), # 彈性處理
-                'phone': str(row.get('手機')).strip(),         # 記得轉字串並去空白
+                'name': name,
+                'phone': phone,
                 'company': row.get('公司名稱'),
                 'department': row.get('單位'),
                 'job_title': row.get('職稱'),
