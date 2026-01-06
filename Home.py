@@ -5,7 +5,7 @@ from utils.db_logic import get_db_connection
 st.set_page_config(page_title="學員管理系統", page_icon="💼", layout="wide")
 
 # --- 側邊欄與標題 ---
-st.title("💼 學員資料管理系統")
+st.title("💼 學員資料管理系統(SQLite版)")
 st.markdown("---")
 
 # --- 1. 數據統計區 (這部分最能增加專業感) ---
