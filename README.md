@@ -1,4 +1,4 @@
-💼 學員與教育訓練整合管理系統 (CRM System for Training Management)
+💼 學員與教育訓練整合管理系統 (CRM System for Training Management)  https://pmdatabase-xmayvkhemfw6fqdddzydib.streamlit.app/
 
   🚀 專案簡介
   
@@ -41,7 +41,6 @@
   
   📂 目錄結構
   
-
       Project_Root/
       ├── Home.py                 # 應用程式入口與儀表板 (Dashboard)
       ├── crm.db                  # SQLite 資料庫文件 (核心資料存儲)
@@ -67,4 +66,4 @@
 
 ---
 
-*本專案為2026寒假自主學習成果，透過解決真實世界的業務需求，深化了對 Python 資料處理與 Web 應用開發的理解。*
+*本專案為2026寒假自主學習成果，透過解決真實世界的業務需求，深化了對 Python 資料處理、 SQLite實作 與 Web 應用開發的理解。*
