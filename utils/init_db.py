@@ -14,6 +14,7 @@ def create_database():
     # 3. 啟用外鍵約束 (SQLite 預設有時會關閉，開啟比較安全)
     cursor.execute("PRAGMA foreign_keys = ON;")
 
+
     # --- 定義 SQL 語法 ---
 
     # 表 1: 學員主表 (Students)
@@ -73,6 +74,10 @@ def create_database():
         print("正在建立 'software_purchases' 表...")
         cursor.execute(sql_create_software)
         
+        # 建立索引以加速查詢        
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_student_name ON students (name);")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_student_phone ON students (phone);")
+
         # 5. 提交變更 (Commit) - 這步沒做，資料庫不會真的存檔
         conn.commit()
         print(f"成功！資料庫 {DB_NAME} 已建立完成。")
@@ -80,6 +85,7 @@ def create_database():
     except Exception as e:
         print(f"發生錯誤：{e}")
         conn.rollback() # 如果出錯，回復到原本狀態
+    
         
     finally:
         # 6. 關閉連線 (好習慣)
