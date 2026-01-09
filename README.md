@@ -1,5 +1,6 @@
 💼 學員與教育訓練整合管理系統 (CRM System for Training Management)  
 (https://pmdatabase-pvl77urya6hs4djp7ztc7h.streamlit.app/)
+  
   🚀 專案簡介
   
       本專案利用寒假期間開發，旨在解決父親在保險/教育訓練業務中，長期面臨的 「學員資料散落在不同 Excel 檔」、「難以追蹤個人上課歷史」 以及 「軟體序號管理混亂」等問題。
