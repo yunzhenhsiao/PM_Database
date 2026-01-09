@@ -2,6 +2,7 @@
 (https://pmdatabase-pvl77urya6hs4djp7ztc7h.streamlit.app/)
   
   🚀 專案簡介
+  
       本專案利用寒假期間開發，旨在解決父親在保險/教育訓練業務中，長期面臨的 「學員資料散落在不同 Excel 檔」、「難以追蹤個人上課歷史」 以及 「軟體序號管理混亂」等問題。
       不同於市面上龐大的 CRM 系統，我使用 Python 與 Streamlit 構建了一個輕量級、針對特定業務邏輯客製化的 Web App。系統採用 SQLite 作為核心資料庫，實現了學員資料的集中化管理（Single Source of Truth），讓父親能透過手機隨時隨地查詢學員的詳細履歷，而繁雜的資料整併工作則由後台自動化處理。
   
